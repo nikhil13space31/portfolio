@@ -1,5 +1,8 @@
 {
   "description": "Create an interactive modern portfolio that showcases your resume and internship results, enhancing your professional presence and attracting opportunities.",
+  "icons": {
+    "icon": "/favicon.png"
+  },
   "robots": {
     "index": false
   },
