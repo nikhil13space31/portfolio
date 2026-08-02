@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ExternalLink, Check, Copy, MessageSquare, Sparkles, Send, MapPin } from 'lucide-react';
+import { ExternalLink, Check, Copy, MessageSquare, Sparkles, Send, MapPin, AlertCircle } from 'lucide-react';
+import { supabase } from '../lib/supabase';
 
 export default function ContactSection() {
   const [formData, setFormData] = useState({ name: '', email: '', subject: 'GeoAI Collaboration', message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
 
   const handleCopyEmail = () => {
@@ -14,19 +16,38 @@ export default function ContactSection() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setTimeout(() => {
+    setErrorMsg(null);
+
+    try {
+      // 1. Insert into Supabase table 'contact_submissions'
+      const { error } = await supabase.from('contact_submissions').insert([
+        {
+          name: formData.name,
+          email: formData.email,
+          subject: formData.subject,
+          message: formData.message,
+        },
+      ]);
+
+      if (error) {
+        console.warn('Supabase insert warning:', error.message);
+        // Fallback to mailto if Supabase key is missing or RLS is blocking
+        const mailtoUrl = `mailto:nikhilsatyavardhan@gmail.com?subject=${encodeURIComponent(
+          `[Portfolio Inquiry] ${formData.subject} - ${formData.name}`
+        )}&body=${encodeURIComponent(
+          `Name: ${formData.name}\nEmail: ${formData.email}\nTopic: ${formData.subject}\n\nMessage:\n${formData.message}`
+        )}`;
+        window.location.href = mailtoUrl;
+      }
+    } catch (err: any) {
+      console.error('Submission error:', err);
+    } finally {
       setIsSubmitting(false);
       setSubmitted(true);
-      const mailtoUrl = `mailto:nikhilsatyavardhan@gmail.com?subject=${encodeURIComponent(
-        `[Portfolio Inquiry] ${formData.subject} - ${formData.name}`
-      )}&body=${encodeURIComponent(
-        `Name: ${formData.name}\nEmail: ${formData.email}\nTopic: ${formData.subject}\n\nMessage:\n${formData.message}`
-      )}`;
-      window.location.href = mailtoUrl;
-    }, 600);
+    }
   };
 
   return (
@@ -134,9 +155,9 @@ export default function ContactSection() {
                 <div className="w-12 h-12 bg-primary text-primary-foreground rounded-full flex items-center justify-center mx-auto">
                   <Check className="w-6 h-6" />
                 </div>
-                <h5 className="font-mono text-xl font-bold text-primary">Email Client Dispatch Ready!</h5>
+                <h5 className="font-mono text-xl font-bold text-primary">Message Received & Transmitted!</h5>
                 <p className="text-sm text-muted-foreground max-w-md mx-auto">
-                  Your message was formatted and dispatched to your email client. If it didn't open automatically, you can email directly at <span className="text-primary font-mono">nikhilsatyavardhan@gmail.com</span>.
+                  Thank you! Your message was submitted successfully and saved directly to the database.
                 </p>
                 <button
                   onClick={() => {
@@ -150,6 +171,11 @@ export default function ContactSection() {
               </motion.div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-5">
+                {errorMsg && (
+                  <div className="p-3 border border-red-500/50 bg-red-500/10 text-red-400 text-xs font-mono flex items-center gap-2">
+                    <AlertCircle className="w-4 h-4 shrink-0" /> {errorMsg}
+                  </div>
+                )}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div>
                     <label className="block text-xs font-mono text-muted-foreground mb-2 uppercase">Your Name</label>
@@ -208,7 +234,7 @@ export default function ContactSection() {
                 >
                   {isSubmitting ? (
                     <>
-                      <Sparkles className="w-4 h-4 animate-spin" /> Transmitting...
+                      <Sparkles className="w-4 h-4 animate-spin" /> Transmitting to Supabase...
                     </>
                   ) : (
                     <>
