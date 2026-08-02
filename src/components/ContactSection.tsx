@@ -155,9 +155,9 @@ export default function ContactSection() {
                 <div className="w-12 h-12 bg-primary text-primary-foreground rounded-full flex items-center justify-center mx-auto">
                   <Check className="w-6 h-6" />
                 </div>
-                <h5 className="font-mono text-xl font-bold text-primary">Message Received & Transmitted!</h5>
+                <h5 className="font-mono text-xl font-bold text-primary">Message Received!</h5>
                 <p className="text-sm text-muted-foreground max-w-md mx-auto">
-                  Thank you! Your message was submitted successfully and saved directly to the database.
+                  Thank you! You will hear from me soon.
                 </p>
                 <button
                   onClick={() => {
@@ -234,7 +234,7 @@ export default function ContactSection() {
                 >
                   {isSubmitting ? (
                     <>
-                      <Sparkles className="w-4 h-4 animate-spin" /> Transmitting to Supabase...
+                      <Sparkles className="w-4 h-4 animate-spin" /> Sending...
                     </>
                   ) : (
                     <>
