@@ -60,9 +60,10 @@ export default function ContactSection() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             username: 'Portfolio Bot',
+            content: '🔔 **New Contact Form Submission!**',
             embeds: [
               {
-                title: `📬 New Portfolio Message: ${formData.subject}`,
+                title: `📬 ${formData.subject}`,
                 color: 65382,
                 fields: [
                   { name: 'Name', value: formData.name, inline: true },
