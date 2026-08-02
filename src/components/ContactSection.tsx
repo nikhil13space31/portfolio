@@ -22,8 +22,8 @@ export default function ContactSection() {
     setErrorMsg(null);
 
     try {
-      // 1. Insert into Supabase table 'contact_submissions'
-      const { error } = await supabase.from('contact_submissions').insert([
+      // 1. Save submission into Supabase database table
+      const { error: supabaseError } = await supabase.from('contact_submissions').insert([
         {
           name: formData.name,
           email: formData.email,
@@ -32,15 +32,24 @@ export default function ContactSection() {
         },
       ]);
 
-      if (error) {
-        console.warn('Supabase insert warning:', error.message);
-        // Fallback to mailto if Supabase key is missing or RLS is blocking
-        const mailtoUrl = `mailto:nikhilsatyavardhan@gmail.com?subject=${encodeURIComponent(
-          `[Portfolio Inquiry] ${formData.subject} - ${formData.name}`
-        )}&body=${encodeURIComponent(
-          `Name: ${formData.name}\nEmail: ${formData.email}\nTopic: ${formData.subject}\n\nMessage:\n${formData.message}`
-        )}`;
-        window.location.href = mailtoUrl;
+      if (supabaseError) {
+        console.warn('Supabase insert note:', supabaseError.message);
+      }
+
+      // 2. Send instant email via Web3Forms if VITE_WEB3FORMS_KEY is configured
+      const web3FormsKey = import.meta.env.VITE_WEB3FORMS_KEY;
+      if (web3FormsKey) {
+        await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            access_key: web3FormsKey,
+            name: formData.name,
+            email: formData.email,
+            subject: `[Portfolio] ${formData.subject} - ${formData.name}`,
+            message: formData.message,
+          }),
+        });
       }
     } catch (err: any) {
       console.error('Submission error:', err);
