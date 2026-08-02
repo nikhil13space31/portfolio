@@ -51,6 +51,31 @@ export default function ContactSection() {
           }),
         });
       }
+
+      // 3. Send instant formatted alert to Discord Webhook
+      const discordUrl = import.meta.env.VITE_DISCORD_WEBHOOK_URL;
+      if (discordUrl) {
+        await fetch(discordUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username: 'Portfolio Bot',
+            embeds: [
+              {
+                title: `📬 New Portfolio Message: ${formData.subject}`,
+                color: 65382,
+                fields: [
+                  { name: 'Name', value: formData.name, inline: true },
+                  { name: 'Email', value: formData.email, inline: true },
+                  { name: 'Topic', value: formData.subject, inline: false },
+                  { name: 'Message', value: formData.message, inline: false },
+                ],
+                timestamp: new Date().toISOString(),
+              },
+            ],
+          }),
+        });
+      }
     } catch (err: any) {
       console.error('Submission error:', err);
     } finally {
