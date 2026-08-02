@@ -1,10 +1,11 @@
 {
-  "description": "Create an interactive modern portfolio that showcases your resume and internship results, enhancing your professional presence and attracting opportunities.",
+  "title": "Nikhil Satya Vardhan Kada | Geo-Informatics & AI Engineer",
+  "description": "Interactive portfolio of Nikhil Satya Vardhan Kada — Geo-Informatics & AI Engineer specializing in Spatial AI, Remote Sensing, Machine Learning, and Web Applications.",
   "icons": {
     "icon": "/favicon.png"
   },
   "robots": {
-    "index": false
+    "index": true
   },
   "accessibility": {
     "addBypassLinks": false,
