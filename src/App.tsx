@@ -249,7 +249,7 @@ export default function App() {
       </main>
 
       <footer className="border-t border-border/50 py-8 text-center text-muted-foreground font-mono text-sm">
-        <p>Built for Nikhil Satya Vardhan Kada</p>
+        <p>Built by Nikhil Satya Vardhan Kada</p>
       </footer>
     </div>
   );

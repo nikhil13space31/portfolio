@@ -91,7 +91,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       </main>
 
       <footer className="border-t border-border/50 py-8 text-center text-muted-foreground font-mono text-sm">
-        <p>Built for Nikhil Satya Vardhan Kada — Geo-Informatics & AI Engineer</p>
+        <p>Built by Nikhil Satya Vardhan Kada — Geo-Informatics & AI Engineer</p>
       </footer>
     </div>
   );
