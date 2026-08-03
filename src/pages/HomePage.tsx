@@ -25,10 +25,10 @@ export default function HomePage() {
             Nikhil Satya<br />Vardhan Kada
           </h1>
           <h2 className="text-2xl md:text-4xl text-muted-foreground font-mono mb-8">
-            Geo-Informatics Engineer & AI Specialist.
+            Geo-Informatics & AI Engineer
           </h2>
           <p className="max-w-2xl text-lg text-muted-foreground leading-relaxed mb-10">
-            Geo-Informatics Engineer specializing in geospatial analysis, remote sensing, and deep learning for location intelligence. Building scalable GeoAI pipelines and processing UAV/satellite imagery to solve real-world analytical problems.
+            Geo-Informatics & AI Engineer specializing in geospatial analysis, remote sensing, and deep learning for location intelligence. Building scalable GeoAI pipelines and processing UAV/satellite imagery to solve real-world analytical problems.
           </p>
 
           <div className="flex flex-wrap gap-4 font-mono">
